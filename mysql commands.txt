@@ -1,3 +1,14 @@
+Category	Purpose					Example Commands
+DDL	   Defines database structures			CREATE, ALTER, DROP, TRUNCATE
+DML	   Manipulates table data			INSERT, UPDATE, DELETE, SELECT
+DCL	   Controls user access				GRANT, REVOKE
+TCL	   Manages transactions				COMMIT, ROLLBACK, SAVEPOINT
+DQL	   Queries data					SELECT
+
+
+
+
+
 DML
 
 CREATE TABLE Student(StuId int not null,Name varchar(100),Roll int);
@@ -29,7 +40,6 @@ Alter table Student Change email  gmail varchar(100);
 
 
 
-----------------------------------------------
 
 JOINS
 
@@ -39,58 +49,108 @@ In MySQL, joins are used to combine data from multiple tables based on a related
 Returns only the matching records between both tables.
 
 
-SELECT orders.order_id, customers.customer_name
-FROM orders
-INNER JOIN customers ON orders.customer_id = customers.customer_id;
+	SELECT orders.order_id, customers.customer_name
+	FROM orders
+	INNER JOIN customers ON orders.customer_id = customers.customer_id;
 ✅ Only returns rows where customer_id exists in both tables.
 
 2. LEFT JOIN (or LEFT OUTER JOIN)
 Returns all records from the left table and matching records from the right table. If there is no match, NULL is returned.
 
 
-SELECT customers.customer_name, orders.order_id
-FROM customers
-LEFT JOIN orders ON customers.customer_id = orders.customer_id;
+	SELECT customers.customer_name, orders.order_id
+	FROM customers
+	LEFT JOIN orders ON customers.customer_id = orders.customer_id;
 ✅ Returns all customers, even those who haven't placed an order.
 
 3. RIGHT JOIN (or RIGHT OUTER JOIN)
 Returns all records from the right table and matching records from the left table. If there is no match, NULL is returned.
 
-SELECT orders.order_id, customers.customer_name
-FROM orders
-RIGHT JOIN customers ON orders.customer_id = customers.customer_id;
+	SELECT orders.order_id, customers.customer_name
+	FROM orders
+	RIGHT JOIN customers ON orders.customer_id = customers.customer_id;
 ✅ Returns all orders, even if they are not associated with a customer.
 
 4. FULL JOIN (or FULL OUTER JOIN) - Not Supported in MySQL
 MySQL does not support FULL JOIN, but you can simulate it using UNION.
 
 
-SELECT customers.customer_name, orders.order_id
-FROM customers
-LEFT JOIN orders ON customers.customer_id = orders.customer_id
+	SELECT customers.customer_name, orders.order_id
+	FROM customers
+	LEFT JOIN orders ON customers.customer_id = orders.customer_id
 
 UNION
 
-SELECT customers.customer_name, orders.order_id
-FROM customers
-RIGHT JOIN orders ON customers.customer_id = orders.customer_id;
+	SELECT customers.customer_name, orders.order_id
+	FROM customers
+	RIGHT JOIN orders ON customers.customer_id = orders.customer_id;
 ✅ Returns all records from both tables, filling missing values with NULL.
 
 5. CROSS JOIN
-Returns the Cartesian product of two tables (each row from the first table joins with every row from the second table).
+	Returns the Cartesian product of two tables (each row from the first table joins with every row from the second table).
 
 
-SELECT customers.customer_name, products.product_name
-FROM customers
-CROSS JOIN products;
+	SELECT customers.customer_name, products.product_name
+	FROM customers
+	CROSS JOIN products;
 ✅ If customers has 5 rows and products has 4 rows, the result will have 5 × 4 = 20 rows.
 
 6. SELF JOIN
 A join where a table joins with itself.
 
 
-SELECT e1.employee_name AS Employee, e2.employee_name AS Manager
-FROM employees e1
-JOIN employees e2 ON e1.manager_id = e2.employee_id;
+	SELECT e1.employee_name AS Employee, e2.employee_name AS Manager
+	FROM employees e1
+	JOIN employees e2 ON e1.manager_id = e2.employee_id;
 ✅ Used for hierarchical data, such as an employee-manager relationship.
+
+
+--------------------------------------------------------------------------------------------
+Primary Key:
+
+ALTER TABLE employee ADD PRIMARY KEY (customer_id);
+
+Or we can declare at the time of Declaration of table
+
+Create Table Employee(
+customer_id int PRIMARY KEY,
+customer_name varchar(100),
+email VARCHAR(100)
+);
+
+Composite Primary Key
+
+Create Table Employee(
+customer_id int ,
+customer_name varchar(100),
+email VARCHAR(100),
+PRIMARY KEY(customer_id,email)
+);
+
+ALTER TABLE Employee ADD PRIMARY KEY(customer_id,email);
+
+--------------------------------------------------------------------------------------------
+FOREIGN KEY:
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_name VARCHAR(100),
+    email VARCHAR(100) UNIQUE
+);
+
+
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_date DATE,
+    customer_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
+
+ Options:
+
+CASCADE → Deletes or updates child rows when the parent row is deleted/updated.
+SET NULL → Sets foreign key to NULL if parent row is deleted/updated.
+RESTRICT → Prevents deletion/update if referenced rows exist.
+NO ACTION → Same as RESTRICT in MySQL
 
