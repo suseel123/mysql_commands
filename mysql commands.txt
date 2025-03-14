@@ -29,6 +29,7 @@ Alter table Student Change email  gmail varchar(100);
 
 
 
+----------------------------------------------
 
 JOINS
 
