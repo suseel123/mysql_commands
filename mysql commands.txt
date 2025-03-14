@@ -1,0 +1,95 @@
+DML
+
+CREATE TABLE Student(StuId int not null,Name varchar(100),Roll int);
+
+Insert into Student(Stuid,name,roll) Values (1,"suseel","100");
+
+Update Student SET roll=1000 where stuid=1;
+
+delete from student where stuid=1;
+
+select * from student where stuid=1;
+
+
+----------------------------------------------
+
+
+DDL
+
+create table Student;
+drop table Student;
+
+
+Atlter TABLE STUDENT ADD EMAIL varchar(100);
+ALter Table Student Drop Email;
+Alter Table Student Modify email gmail varchar(100);
+Alter table Student Change email  gmail varchar(100);
+
+
+
+
+
+
+JOINS
+
+In MySQL, joins are used to combine data from multiple tables based on a related column. There are different types of joins:
+
+1. INNER JOIN
+Returns only the matching records between both tables.
+
+
+SELECT orders.order_id, customers.customer_name
+FROM orders
+INNER JOIN customers ON orders.customer_id = customers.customer_id;
+✅ Only returns rows where customer_id exists in both tables.
+
+2. LEFT JOIN (or LEFT OUTER JOIN)
+Returns all records from the left table and matching records from the right table. If there is no match, NULL is returned.
+
+
+SELECT customers.customer_name, orders.order_id
+FROM customers
+LEFT JOIN orders ON customers.customer_id = orders.customer_id;
+✅ Returns all customers, even those who haven't placed an order.
+
+3. RIGHT JOIN (or RIGHT OUTER JOIN)
+Returns all records from the right table and matching records from the left table. If there is no match, NULL is returned.
+
+SELECT orders.order_id, customers.customer_name
+FROM orders
+RIGHT JOIN customers ON orders.customer_id = customers.customer_id;
+✅ Returns all orders, even if they are not associated with a customer.
+
+4. FULL JOIN (or FULL OUTER JOIN) - Not Supported in MySQL
+MySQL does not support FULL JOIN, but you can simulate it using UNION.
+
+
+SELECT customers.customer_name, orders.order_id
+FROM customers
+LEFT JOIN orders ON customers.customer_id = orders.customer_id
+
+UNION
+
+SELECT customers.customer_name, orders.order_id
+FROM customers
+RIGHT JOIN orders ON customers.customer_id = orders.customer_id;
+✅ Returns all records from both tables, filling missing values with NULL.
+
+5. CROSS JOIN
+Returns the Cartesian product of two tables (each row from the first table joins with every row from the second table).
+
+
+SELECT customers.customer_name, products.product_name
+FROM customers
+CROSS JOIN products;
+✅ If customers has 5 rows and products has 4 rows, the result will have 5 × 4 = 20 rows.
+
+6. SELF JOIN
+A join where a table joins with itself.
+
+
+SELECT e1.employee_name AS Employee, e2.employee_name AS Manager
+FROM employees e1
+JOIN employees e2 ON e1.manager_id = e2.employee_id;
+✅ Used for hierarchical data, such as an employee-manager relationship.
+
